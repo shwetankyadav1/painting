@@ -46,3 +46,5 @@ Another engaging aspect of models trained on paintings is the ability to transfe
 - ResNets are not suited for image style transfer. 
 Focusing on artists, a natural extension would be to add more artists, potentially using a knowledge distillation type technique to avoid having to retrain each time & using just a few example images. Combining artist and style prediction into a single multilabel prediction model can also be carried out. 
 
+## Notes
+The two classificaiton files were run in Google Colab and have instructions to download the dataset directly from Kaggle using its API, my username and key have been removed. Other files have instructions for data stored on a local drive but can easily repurposed to point to data on Colab drive, which can be downloaded once for all files. 
