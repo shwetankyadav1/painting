@@ -9,12 +9,12 @@ Several institutions have recently made available images of historical paintings
 Details are in provided file ‘Capstone_EDA.ipynb’. The primary route of interacting with the data structure was through the csv file containing all the image metadata. Several of the columns, particularly for date and genre, had null values. For the two main classification targets, style and artist, rows containing null values in the corresponding column were removed (a small portion of total rows). This was done separately for each target, as different rows had different null columns. 
 Next, rows with excessively large pixel resolution or file size were also discarded. Finally, the distribution of unique classes and their image count was plotted. First for style, there were 136 unique styles present (Figure 1). However, over half of these had very few example images less than 500 in number. Image classification learning typically is said to require in the thousands for good learning and can be quite computationally taxing. Furthermore, a large number of classes makes modelling difficult. Therefore, it was decided that only the top 20 categories in terms of example images available would be modelled for classification. This resulted in the 20 styles shown in Figure 2. 
 As can be seen, there is still a great deal of imbalance, but it is not practical to utilize thousands of images for the more numerous classes. Therefore, an equal number of images was randomly drawn from each style, thus removing imbalance issues as well as computational practicality ones. Beyond this, as the raw data was in form of pixel values for each image, not much preprocessing or data wrangling was possible other than resizing of the images (all were resized to equal square dimensions of at first 224x224 and then 320x320). A further filter issue was images with extreme dimension ratios (very long and narrow) which might not perform well after being reshaped into a square. However, after filtering for this (where discrepancy was not beyond 1:3), there was little change in model accuracy observed. 
-![Figure 1: Art Style Classes and Counts](https://user-images.githubusercontent.com/81581537/125824117-3115b9b2-dbf1-4ee4-8fa8-ffd4ea6ffbb9.png)
-<br>Figure 1: Art Style Classes and Counts
+![](https://user-images.githubusercontent.com/81581537/125824117-3115b9b2-dbf1-4ee4-8fa8-ffd4ea6ffbb9.png)<br>
+*Figure 1: Art Style Classes and Counts*<br>
 ![image](https://user-images.githubusercontent.com/81581537/125825286-20bb9901-a523-4fdf-b3b3-27b8d9f34d6b.png)
-Figure 2: Top 20 Art Style Classes and Counts
+<br>*Figure 2: Top 20 Art Style Classes and Counts*<br>
 ![image](https://user-images.githubusercontent.com/81581537/125825439-68618208-c7a6-4eac-ab59-d498cca0f995.png)
-Figure 3: Top 20 Artist Classes and Counts
+<br>*Figure 3: Top 20 Artist Classes and Counts*<br>
 
 The same top 20 ranking was carried out for artists, which had much less class imbalance as seen in Figure 3. However, the total number of image examples was much lower and so all images for each class were used in model training. 
 
@@ -31,18 +31,18 @@ Next, the same process was repeated for artist classification, but with only Xce
 Precision and recall scores, along with a confusion matrix, were generated (Figures 4 and 5).
 The best classified artists seem to be: Piranesi (sketch like art), Aivazovsky (many water dominated landscapes in realistic style), Dore (etchings) and Durer (distinctive early period). On the other hand, Sargent and Kustodiev have both precision and recall as low values, meaning they are likely difficult to characterize uniquely. Picasso, Saryan and Repin stand out for having much higher recall than precision, meaning they are often being predicted as artists for others' work. This could point to a wider variety in their painting styles (Picasso especially seems to have widely differeing styles on inspection). Matisse seems to have the opposite problem where very few of his works are being classified as such, those that are have fairly high precision. This did indeed seem to be the case where independently downloaded works of Matisse were often predicted to be Picasso works (often using similar color and shape outlines).
 
-![image](https://user-images.githubusercontent.com/81581537/125825585-008b7fbe-98e6-4457-9faf-42b15dc1b07e.png)
-Figure 4: Precision and Recall for Artist Classification
+<img src="https://user-images.githubusercontent.com/81581537/125826993-98b5ab26-d1b7-492f-890f-235b11ff17ed.png" width="45">
+<br>*Figure 4: Precision and Recall for Artist Classification*<br>
 
 ![image](https://user-images.githubusercontent.com/81581537/125825640-44ad58bf-4b70-4a2e-a08a-5ebe351ef3bb.png)
-Figure 5: Confusion Matrix for Artist Classification
+<br>*Figure 5: Confusion Matrix for Artist Classification*<br>
 
 ## Art Style Transfer
 Another engaging aspect of models trained on paintings is the ability to transfer the style of one image onto another, where the intermediate layers of a CNN model are extracted to transform the image. This is typically done using VGG19 or VGG16 CNNs, which are quite old now and they are used in their pre-trained form with no retraining. A natural improvement would be to use my trained models to extract these layers; as the models had been trained specifically on paintings versus the photograph object recognition training of available CNNs, it was theorized they would perform better in painting style transfer (even with the low accuracy style classifier). However, it was found that the ResNet model layers, after much trial and error, still produced fault images with a deep yellow tinge across them. Literature research suggested ResNets & many complex CNNs are difficult to use in style transfer while VGGs still work best due to their simple sequential architecture. 
 
 ## Summary and Next Steps
-•	Paintings can be decently classified by artist (accuracy in the 70s) whereas they are quite difficult to do so for style.
-•	Artist classification can be trained with few images per class (<500)
-•	ResNets are not suited for image style transfer. 
+- Paintings can be decently classified by artist (accuracy in the 70s) whereas they are quite difficult to do so for style.
+- Artist classification can be trained with few images per class (<500)
+- ResNets are not suited for image style transfer. 
 Focusing on artists, a natural extension would be to add more artists, potentially using a knowledge distillation type technique to avoid having to retrain each time & using just a few example images. Combining artist and style prediction into a single multilabel prediction model can also be carried out. 
 
